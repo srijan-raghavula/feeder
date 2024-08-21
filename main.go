@@ -1,9 +1,12 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
+	"github.com/srijan-raghavula/feeder/internal/database"
 	"log"
 	"net/http"
 	"os"
@@ -11,9 +14,23 @@ import (
 
 func main() {
 	godotenv.Load()
+
+	// db shit
+	dbURL := os.Getenv("CONN_STR")
+	db, err := sql.Open("postgres", dbURL)
+	if err != nil {
+		log.Fatalln("error opening db:", err.Error())
+	}
+	dbQueries := database.New(db)
+	apiCfg := apiConfig{
+		DB: dbQueries,
+	}
+
+	// actual server shit
 	port := os.Getenv("PORT")
 	mux := http.NewServeMux()
 
+	// idle handler
 	mux.HandleFunc("/", welcome)
 	server := &http.Server{
 		Addr:    fmt.Sprintf("localhost:%s", port),
@@ -22,6 +39,9 @@ func main() {
 
 	mux.HandleFunc("GET /v1/healthz", readiness)
 	mux.HandleFunc("GET /v1/err", errHandler)
+
+	mux.HandleFunc("POST /v1/users", apiCfg.createUser)
+	mux.HandleFunc("GET /v1/users", apiCfg.getUser)
 
 	log.Println("Listening and serving at port:", server.Addr)
 	log.Fatal(server.ListenAndServe())
