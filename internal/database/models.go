@@ -4,6 +4,15 @@
 
 package database
 
+type Feed struct {
+	ID        string
+	CreatedAt string
+	UpdatedAt string
+	Name      string
+	Url       string
+	UserID    string
+}
+
 type User struct {
 	ID        string
 	CreatedAt string
