@@ -37,11 +37,17 @@ func main() {
 		Handler: mux,
 	}
 
+	// server health related endpoints
 	mux.HandleFunc("GET /v1/healthz", readiness)
 	mux.HandleFunc("GET /v1/err", errHandler)
 
+	// user creation and getting
 	mux.HandleFunc("POST /v1/users", apiCfg.createUser)
-	mux.HandleFunc("GET /v1/users", apiCfg.getUser)
+	mux.HandleFunc("GET /v1/users", apiCfg.midAuth(apiCfg.getUser))
+
+	// feed creation and getting
+	mux.HandleFunc("POST /v1/feeds", apiCfg.midAuth(apiCfg.createFeed))
+	mux.HandleFunc("GET /v1/feeds", apiCfg.getAllFeeds)
 
 	log.Println("Listening and serving at port:", server.Addr)
 	log.Fatal(server.ListenAndServe())
