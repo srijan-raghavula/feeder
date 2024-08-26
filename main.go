@@ -49,6 +49,11 @@ func main() {
 	mux.HandleFunc("POST /v1/feeds", apiCfg.midAuth(apiCfg.createFeed))
 	mux.HandleFunc("GET /v1/feeds", apiCfg.getAllFeeds)
 
+	// feed follow and follow deletion
+	mux.HandleFunc("POST /v1/feed_follows", apiCfg.midAuth(apiCfg.followFeed))
+	mux.HandleFunc("DELETE /v1/feed_follows/{feedFollowID}", apiCfg.midAuth(apiCfg.unFollowFeed))
+	mux.HandleFunc("GET /v1/feed_follows", apiCfg.midAuth(apiCfg.getUserFollows))
+
 	log.Println("Listening and serving at port:", server.Addr)
 	log.Fatal(server.ListenAndServe())
 }

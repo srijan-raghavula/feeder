@@ -13,6 +13,14 @@ type Feed struct {
 	UserID    string
 }
 
+type Follow struct {
+	ID        string
+	CreatedAt string
+	UpdatedAt string
+	FeedID    string
+	UserID    string
+}
+
 type User struct {
 	ID        string
 	CreatedAt string

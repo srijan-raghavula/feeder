@@ -31,4 +31,12 @@ type feed struct {
 	UserID    string `json:"user_id"`
 }
 
+type follow struct {
+	ID        string `json:"id"`
+	CreatedAt string `json:"created_at`
+	UpdatedAt string `json:"updated_at"`
+	FeedID    string `json:"feed_id"`
+	UserID    string `json:"user_id"`
+}
+
 type authedUserHandler func(http.ResponseWriter, *http.Request, database.User)
