@@ -37,6 +37,8 @@ func main() {
 		Handler: mux,
 	}
 
+	go apiCfg.workerLoop()
+
 	// server health related endpoints
 	mux.HandleFunc("GET /v1/healthz", readiness)
 	mux.HandleFunc("GET /v1/err", errHandler)

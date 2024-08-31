@@ -4,13 +4,18 @@
 
 package database
 
+import (
+	"database/sql"
+)
+
 type Feed struct {
-	ID        string
-	CreatedAt string
-	UpdatedAt string
-	Name      string
-	Url       string
-	UserID    string
+	ID            string
+	CreatedAt     string
+	UpdatedAt     string
+	Name          string
+	Url           string
+	UserID        string
+	LastFetchedAt sql.NullTime
 }
 
 type Follow struct {

@@ -71,13 +71,7 @@ func (apiCfg *apiConfig) createUser(w http.ResponseWriter, r *http.Request) {
 		resWithError(w, 500, err.Error())
 		return
 	}
-	userToEncode := &user{
-		ID:        u.ID,
-		CreatedAt: u.CreatedAt,
-		UpdatedAt: u.UpdatedAt,
-		Name:      u.Name,
-		ApiKey:    u.ApiKey,
-	}
+	userToEncode := userFromDBtoEnc(u)
 	writeData, err := json.Marshal(userToEncode)
 	if err != nil {
 		resWithError(w, 500, err.Error())
@@ -94,13 +88,7 @@ func getApiKeyFromReq(r *http.Request) string {
 }
 
 func (apiCfg *apiConfig) getUser(w http.ResponseWriter, r *http.Request, u database.User) {
-	userToEncode := user{
-		ID:        u.ID,
-		CreatedAt: u.CreatedAt,
-		UpdatedAt: u.UpdatedAt,
-		Name:      u.Name,
-		ApiKey:    u.ApiKey,
-	}
+	userToEncode := userFromDBtoEnc(u)
 	writeData, err := json.Marshal(userToEncode)
 	if err != nil {
 		resWithError(w, 500, err.Error())
@@ -141,14 +129,7 @@ func (apiCfg *apiConfig) createFeed(w http.ResponseWriter, r *http.Request, u da
 		resWithError(w, 500, err.Error())
 		return
 	}
-	feedToEncode := feed{
-		ID:        feedFromDB.ID,
-		CreatedAt: feedFromDB.CreatedAt,
-		UpdatedAt: feedFromDB.UpdatedAt,
-		Name:      feedFromDB.Name,
-		Url:       feedFromDB.Url,
-		UserID:    feedFromDB.UserID,
-	}
+	feedToEncode := feedFromDBtoEnc(feedFromDB)
 	followParams := database.FollowFeedParams{
 		ID:        uuid.New().String(),
 		CreatedAt: time.Now().UTC().String(),
@@ -189,14 +170,7 @@ func (apiCfg *apiConfig) getAllFeeds(w http.ResponseWriter, r *http.Request) {
 	}
 	feedsToEncode := make([]feed, 0)
 	for _, feedFromDB := range feedsFromDB {
-		feedToEncode := feed{
-			ID:        feedFromDB.ID,
-			CreatedAt: feedFromDB.CreatedAt,
-			UpdatedAt: feedFromDB.UpdatedAt,
-			Name:      feedFromDB.Name,
-			Url:       feedFromDB.Url,
-			UserID:    feedFromDB.UserID,
-		}
+		feedToEncode := feedFromDBtoEnc(feedFromDB)
 		feedsToEncode = append(feedsToEncode, feedToEncode)
 	}
 	writeData, err := json.Marshal(feedsToEncode)
