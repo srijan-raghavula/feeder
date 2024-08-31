@@ -43,13 +43,17 @@ type follow struct {
 }
 
 type feedPage struct {
-	Title         string       `xml:"title"`
-	Link          string       `xml:"link"`
-	Description   string       `xml:"description"`
-	Generator     string       `xml:"generator"`
-	Lang          string       `xml:"language"`
-	LastBuildDate string       `xml:"lastBuildDat"`
-	Items         []feeds.Feed `xml:"item"`
+	Rss struct {
+		Channel struct {
+			Title         string       `xml:"title"`
+			Link          string       `xml:"link"`
+			Description   string       `xml:"description"`
+			Generator     string       `xml:"generator"`
+			Language      string       `xml:"language"`
+			LastBuildDate string       `xml:"lastBuildDate"`
+			Items         []feeds.Feed `xml:"item"`
+		} `xml:"channel"`
+	} `xml:"rss"`
 }
 
 type authedUserHandler func(http.ResponseWriter, *http.Request, database.User)

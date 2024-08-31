@@ -10,7 +10,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gorilla/feeds"
 	"github.com/srijan-raghavula/feeder/internal/database"
 )
 
@@ -23,8 +22,8 @@ func (apiCfg *apiConfig) workerLoop() {
 	}
 }
 
-func fetch(url string) (feeds.Feed, error) {
-	var feed feeds.Feed
+func fetch(url string) (feedPage, error) {
+	var feed feedPage
 	res, err := http.Get(url)
 	if err != nil {
 		return feed, err
@@ -33,12 +32,10 @@ func fetch(url string) (feeds.Feed, error) {
 	if res.StatusCode > 399 {
 		return feed, errors.New(res.Status)
 	}
-
 	err = xml.NewDecoder(res.Body).Decode(&feed)
 	if err != nil {
 		return feed, err
 	}
-
 	return feed, nil
 }
 
@@ -67,7 +64,7 @@ func (apiCfg *apiConfig) worker(ctx context.Context) bool {
 					},
 				}
 				apiCfg.DB.MarkFeedFetched(ctx, markFetchedParams)
-				log.Println("Fetched", url, ":\n", feed)
+				log.Println("Fetched", url, ":\n", feed.Rss.Channel.Title)
 			}
 		}(feed.Url)
 		log.Println("Fetcheing next")
