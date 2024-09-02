@@ -26,3 +26,16 @@ func userFromDBtoEnc(userFromDB database.User) user {
 	}
 
 }
+
+func postFromDBtoEnc(postFromDB database.Post) post {
+	return post{
+		ID:          postFromDB.ID,
+		CreatedAt:   postFromDB.CreatedAt,
+		UpdatedAt:   postFromDB.UpdatedAt,
+		Title:       postFromDB.Title,
+		Url:         postFromDB.Url,
+		Description: postFromDB.Description,
+		PublishedAt: postFromDB.PublishedAt,
+		FeedID:      postFromDB.FeedID,
+	}
+}

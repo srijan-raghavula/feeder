@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/gorilla/feeds"
+	"database/sql"
 	"net/http"
 	"time"
 
@@ -42,18 +42,15 @@ type follow struct {
 	UserID    string `json:"user_id"`
 }
 
-type feedPage struct {
-	Rss struct {
-		Channel struct {
-			Title         string       `xml:"title"`
-			Link          string       `xml:"link"`
-			Description   string       `xml:"description"`
-			Generator     string       `xml:"generator"`
-			Language      string       `xml:"language"`
-			LastBuildDate string       `xml:"lastBuildDate"`
-			Items         []feeds.Feed `xml:"item"`
-		} `xml:"channel"`
-	} `xml:"rss"`
+type post struct {
+	ID          string         `json:"id"`
+	CreatedAt   string         `json:"created_at"`
+	UpdatedAt   string         `json:"updated_at"`
+	Title       string         `json:"title"`
+	Url         sql.NullString `json:"url"`
+	Description sql.NullString `json:"description"`
+	PublishedAt sql.NullString `json:"published_at"`
+	FeedID      string         `json:"feed_id"`
 }
 
 type authedUserHandler func(http.ResponseWriter, *http.Request, database.User)

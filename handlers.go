@@ -261,3 +261,33 @@ func (apiCfg *apiConfig) getUserFollows(w http.ResponseWriter, r *http.Request, 
 	w.WriteHeader(200)
 	w.Write(writeData)
 }
+
+func (apiCfg *apiConfig) getPostsByUser(w http.ResponseWriter, r *http.Request, u database.User) {
+	type toEnc struct {
+		Posts []post `json:"posts"`
+	}
+	bodyToEnc := toEnc{}
+	follows, err := apiCfg.DB.GetFollowsByUser(r.Context(), u.ID)
+	if err != nil {
+		resWithError(w, 500, err.Error())
+		return
+	}
+	for i := range follows {
+		post, err := apiCfg.DB.GetPostsByUser(r.Context(), database.GetPostsByUserParams{
+			Limit:  10,
+			FeedID: follows[i].FeedID,
+		})
+		if err != nil {
+			resWithError(w, 500, err.Error())
+			return
+		}
+		bodyToEnc.Posts = append(bodyToEnc.Posts, postFromDBtoEnc(post))
+	}
+	writeData, err := json.Marshal(bodyToEnc)
+	if err != nil {
+		resWithError(w, 500, err.Error())
+		return
+	}
+	w.WriteHeader(200)
+	w.Write(writeData)
+}

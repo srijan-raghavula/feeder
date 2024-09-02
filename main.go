@@ -56,6 +56,9 @@ func main() {
 	mux.HandleFunc("DELETE /v1/feed_follows/{feedFollowID}", apiCfg.midAuth(apiCfg.unFollowFeed))
 	mux.HandleFunc("GET /v1/feed_follows", apiCfg.midAuth(apiCfg.getUserFollows))
 
+	// post getter
+	mux.HandleFunc("GET /v1/posts", apiCfg.midAuth(apiCfg.getPostsByUser))
+
 	log.Println("Listening and serving at port:", server.Addr)
 	log.Fatal(server.ListenAndServe())
 }

@@ -17,3 +17,7 @@ UPDATE feeds
 set last_fetched_at = $2 AND updated_at = $2
 WHERE url = $1
     RETURNING *;
+
+-- name: GetFeedByUrl :one
+SELECT * FROM feeds
+WHERE url = $1;

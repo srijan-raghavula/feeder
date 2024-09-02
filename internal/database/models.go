@@ -26,6 +26,17 @@ type Follow struct {
 	UserID    string
 }
 
+type Post struct {
+	ID          string
+	CreatedAt   string
+	UpdatedAt   string
+	Title       string
+	Url         sql.NullString
+	Description sql.NullString
+	PublishedAt sql.NullString
+	FeedID      string
+}
+
 type User struct {
 	ID        string
 	CreatedAt string

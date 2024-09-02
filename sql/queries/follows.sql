@@ -10,3 +10,7 @@ WHERE user_id=$1;
 -- name: DeleteFollow :exec
 DELETE FROM follows
 WHERE feed_id=$1 AND user_id=$2;
+
+-- name: GetFollowsByUser :many
+SELECT * FROM follows
+WHERE user_id = $1;
